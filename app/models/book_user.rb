@@ -1,4 +1,6 @@
-class Book_user < ActiveRecord::Base
+class BookUser < ActiveRecord::Base
+		belongs_to :user
+		belongs_to :book
 
 #knows its users and the books in the collection
 #belongs to a user and has many books
