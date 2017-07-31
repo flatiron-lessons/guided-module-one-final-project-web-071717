@@ -1,18 +1,19 @@
 class Book < ActiveRecord::Base
 
-  #belongs to a user through a collection
-  #belongs to a collection
-  #has an author, title, rating, genre, summary
-  #maybe has a link to Google Books API -- "learn more"
+  belongs_to :author
+  has_many :book_users
+  has_many :users, through: :book_users
 
-  def collections
-    #take an instance of the book(self) and returns the collections it appears in
+  def genre
+    Genre.all.find{|genre| self.genre_id == genre.id}.name
   end
 
-  def author/genre
-    #see if ActiveRecord will return Book.author without writing the specific method
+  def author
+    Author.all.find{|author| self.author_id == author.id}.name
   end
 
-  
-
+  def users
+    all_books = Book_user.all.select{|book| book.id == self.id}
+    binding.pry
+  end
 end
