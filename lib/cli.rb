@@ -11,12 +11,17 @@ class CLI
 		greeting
 		name = gets.chomp
 		@username = User.all.find_or_create_by(name: name)
+		confirm_login
 		initial_cmds
 		secondary_cmds
 	end
 
 	def greeting
-	  puts "Welcome to Books with Friends.\nPlease enter your username: Ex. brossbach\n\n"
+	  puts "Welcome to Books with Friends.\nPlease enter your username.\nIf you don't have already have a username it will be created for you:\n Ex. brossbach\n\n"
+	end
+
+	def confirm_login
+		puts "Login successful! What would you like to do?"
 	end
 
 	def get_user_input
@@ -30,7 +35,7 @@ class CLI
 	end
 
 	def initial_cmds
-		print "\nPlease enter a valid command:\n1 - List Books\n2 - List Authors\n3 - Recommend Books\n4 - View My Collection\n5 - List Other Users\n6 - Exit\n\nPlease enter the corresponding number for the command you'd like:\n"
+		print "\nPlease enter a valid command:\n Ex. 1\n\n1 - List Books\n2 - List Authors\n3 - Recommend Books\n4 - View My Collection\n5 - List Other Users\n6 - Exit\n"
 		initial_response
 	end
 
@@ -72,23 +77,27 @@ class CLI
 		secondary_response
 	end
 
+	def user_input
+		input = gets.chomp
+	end
+
 	def secondary_response
 
 		input = get_user_input
 		case input
 
 		when "1" # Add book to my list
-			list_books_with_authors
+			list_books
 			puts "\nPlease enter the corresponding number for the book you'd like."
-			input = get_user_input
+			user_input
 			book = Book.all[input.to_i-1]
 			username.read_book(book, username)
-			puts "\n#{book.title} added to your list of books!"
+			puts "\n#{book.title} added to your list of books!\n\nYour list will update when you exit this session."
 			secondary_cmds
 		when "2" # list books for specified author
 			list_authors
 			puts "\nPlease enter the corresponding number for the author."
-			input = get_user_input
+			user_input
 			author = Author.all[input.to_i-1]
 			author.books.map{|book| puts "\n1. #{book.title}"}
 			secondary_cmds
