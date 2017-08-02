@@ -24,15 +24,18 @@ class User < ActiveRecord::Base
 	# 	end.map{|book| book.title}
 	# end
 
-	def read_book(title, author, genre)
+
+	# def add_to_collection?
+	def read_book(book, username)
+		# read_book(book) # takes instance of book
 		# Takes a book "title" and an "author", finds/creates the associated book and adds it to the user's books array.
-		author = Author.find_or_create_by(name: author)
-		book = Book.find_or_create_by(title: title)
-		book.author = author
-		genre = Genre.find_or_create_by(name: genre)
-		book.genre = genre
-		book.save
-		book = book.id
-		BookUser.find_or_create_by(user_id: self.id, book_id: book)
+		# author = Author.find_or_create_by(name: author)
+		# book = Book.find_or_create_by(title: title)
+		# book.author = author
+		# genre = Genre.find_or_create_by(name: genre)
+		# book.genre = genre
+		# book.save
+		# book = book.id
+		BookUser.find_or_create_by(user_id: username.id, book_id: book.id)
 	end
 end
