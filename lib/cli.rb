@@ -73,7 +73,7 @@ class CLI
 	end
 
 	def secondary_cmds
-		print "\nWhat would you like to do?\n\n1 - Add a book to my list\n2 - List books for author\n3 - View my books\n4 - View Books for Another User\n5 - Go back\n6 - Exit\n\nPlease enter the corresponding number for the command you'd like."
+		print "\nWhat would you like to do?\n\n1 - Add a book to my list\n2 - List books for author\n3 - View my books\n4 - Delete Book From my List\n5 - View Books for Another User\n6 - Go back\n7 - Exit\n\nPlease enter the corresponding number for the command you'd like."
 		secondary_response
 	end
 
@@ -104,7 +104,10 @@ class CLI
 		when "3" # view my books
 			puts my_collection
 			secondary_cmds
-		when "4" # View books for another user
+		when "4" # delete book from username.books
+			delete_book
+			secondary_cmds
+		when "5" # View books for another user
 			puts "\nPick a user"
 			puts list_all_users
 			user_books = get_user_collection
@@ -115,9 +118,9 @@ class CLI
 				puts user_books
 				secondary_cmds
 			end
-		when "5" # Go back
+		when "6" # Go back
 			initial_cmds
-		when "6" # Exit
+		when "7" # Exit
 			puts "Thank you for using Books with Friends."
 			exit!
 		else
@@ -153,7 +156,20 @@ class CLI
 		user.books.map{|book| book.title}
 	end
 
+	def delete_book
+		puts "\nEnter the title of the book you wish to delete."
+		username.books.each{|book| puts "#{book.title}"}
+		book_title = get_user_input
+		book_title = book_title.split(" ")
+		book_title.each{|word| word.capitalize!}
+		book_title = book_title.join(" ")
+		book = Book.all.find_by(title: book_title)
+		BookUser.delete(BookUser.find_by(book_id: book.id, user_id: username.id))
+		puts "#{book} deleted from your collection!"
+	end
+
 	def my_collection
+		puts ""
 		username.books.map{|book| book.title}
 	end
 
