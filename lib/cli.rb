@@ -159,13 +159,17 @@ class CLI
 	def delete_book
 		puts "\nEnter the title of the book you wish to delete."
 		username.books.each{|book| puts "#{book.title}"}
+		book_title = get_book_title
+		book = Book.all.find_by(title: book_title)
+		BookUser.delete(BookUser.find_by(book_id: book.id, user_id: username.id))
+		puts "#{book.title} deleted from your collection!"
+	end
+
+	def get_book_title
 		book_title = get_user_input
 		book_title = book_title.split(" ")
 		book_title.each{|word| word.capitalize!}
 		book_title = book_title.join(" ")
-		book = Book.all.find_by(title: book_title)
-		BookUser.delete(BookUser.find_by(book_id: book.id, user_id: username.id))
-		puts "#{book} deleted from your collection!"
 	end
 
 	def my_collection
