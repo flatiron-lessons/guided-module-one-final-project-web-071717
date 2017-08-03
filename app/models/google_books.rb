@@ -26,8 +26,12 @@ module GoogleBooks
 						genre_name = book_in_array["volumeInfo"]["categories"].first
 						genre = Genre.find_or_create_by(name: genre_name)
 					end
+					if book_in_array["volumeInfo"]["description"]
+						description = book_in_array["volumeInfo"]["description"]
+					end
 					book.genre = genre
 					book.author = author
+					book.description = description
 					book.save
 				end
 			#	database+=1
